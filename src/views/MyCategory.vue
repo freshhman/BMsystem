@@ -12,7 +12,7 @@
     border
     style="width: 100%">
     <el-table-column
-      prop="tag"
+      prop="category"
       label="标签名">
     </el-table-column>
     <el-table-column
@@ -28,21 +28,21 @@
     </el-table-column>
   </el-table>
   <div class="addtag" v-show="showadd">
-    <add-tags @closetag="close"></add-tags>
+    <add-category @closecategory="close"></add-category>
   </div>
   <div class="changetag" v-show="showchange">
-    <change-tag @closechange="closechange" :clickitem="clickitem"></change-tag>
+    <change-category @closechange="closechange" :clickitem="clickitem"></change-category>
   </div>
   <div class="tagatc" v-show="articlesshow">
-    <tag-article @closearticle="closearticle" :articles="articles"></tag-article>
+    <category-article @closearticle="closearticle" :articles="articles"></category-article>
   </div>
   </div>
 </template>
 
 <script>
-import AddTags from '@/components/tag/AddTags.vue'
-import ChangeTag from '@/components/tag/ChangeTag.vue'
-import TagArticle from '@/components/tag/TagArticle.vue'
+import AddCategory from '@/components/category/MyAddcategory.vue'
+import ChangeCategory from '@/components/category/ChangeCategory.vue'
+import CategoryArticle from '@/components/category/CategoryArticle.vue'
 export default {
   data () {
     return {
@@ -56,9 +56,9 @@ export default {
     }
   },
   components: {
-    AddTags,
-    ChangeTag,
-    TagArticle
+    AddCategory,
+    ChangeCategory,
+    CategoryArticle
   },
   methods: {
     addatag () {
@@ -66,23 +66,31 @@ export default {
     },
     close (i) {
       this.showadd = i
+      console.log(i)
     },
     closechange (i) {
       this.showchange = i
     },
-    searchitem () {
-      console.log('object')
+    async searchitem () {
+      const name = this.search
+      try {
+        const response = await this.$http.get(`/api/category/search/${name}`)
+        console.log(response.data.data) // Access the data property
+        this.tags = response.data.data[0]
+      } catch (error) {
+        console.error('Error searching:', error)
+      }
     },
     deleteitem (info) {
       const articleid = info.id
-      this.$http.delete(`/api/tags/${articleid}`)
+      this.$http.delete(`/api/category/${articleid}`)
       window.location.reload()
     },
     async content (info) {
       // console.log(info)
       this.articlesshow = true
-      const name = info.tag
-      const res = await this.$http.get(`/api/article/search/${name}`)
+      const name = info.category
+      const res = await this.$http.get(`/api/article/searchcategory/${name}`)
       // console.log(res.data.data[0])
       this.articles = res.data.data[0]
       console.log(this.articles)
@@ -100,7 +108,8 @@ export default {
       this.showchange = true
     },
     async gettags () {
-      const { data: res } = await this.$http.get('/api/tags')
+      const { data: res } = await this.$http.get('/api/category')
+      console.log(res.data)
       this.tags = res.data
     },
     closearticle (i) {
@@ -109,6 +118,13 @@ export default {
   },
   created () {
     this.gettags()
+  },
+  watch: {
+    search (newsearch) {
+      if (newsearch === '') {
+        this.gettags()
+      }
+    }
   }
 }
 </script>
@@ -120,6 +136,7 @@ export default {
 }
 .tag-container{
   position: relative;
+  padding: 20px;
 }
 .addtag{
   z-index: 999;

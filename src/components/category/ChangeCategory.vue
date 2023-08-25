@@ -2,7 +2,7 @@
   <div class="changetag-container">
     <i class="el-icon-close" @click="close"></i>
     <h2>修改标签</h2>
-    <el-input v-model="info.tag"></el-input>
+    <el-input v-model="info.category"></el-input>
     <el-button type="success" @click="submit">提交</el-button>
   </div>
 </template>
@@ -13,7 +13,7 @@ export default {
     return {
       info: {
         id: null,
-        tag: null,
+        category: null,
         update_time: null
       }
     }
@@ -30,10 +30,10 @@ export default {
     async submit () {
       const currentTime = new Date()
       const formattedTime = `${currentTime.getFullYear()}-${currentTime.getUTCMonth() + 1}-${currentTime.getDate()} ${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`
-      const tag = this.info.tag
-      const tagid = this.info.id
+      const category = this.info.category
+      const categoryid = this.info.id
 
-      await this.$http.patch(`/api/category/${tagid}`, { tag: tag, update_time: formattedTime })
+      await this.$http.patch(`/api/category/${categoryid}`, { category: category, update_time: formattedTime })
       window.location.reload()
       this.$emit('closechange', false)
     }

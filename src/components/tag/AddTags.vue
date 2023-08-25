@@ -30,8 +30,19 @@ export default {
         await this.$http.post('/api/tags', { tag: tag, update_time: formattedTime })
         this.$emit('closetag', false)
         window.location.reload()
-      } catch (e) {
-        console.log(e.message)
+      } catch (error) {
+        console.error('Error creating article', error)
+        if (error.response) {
+          console.log('Response data:', error.response.data)
+          console.log('Status code:', error.response.status)
+          if (error.response.status === 403) {
+            alert('你没有权限进行该操作')
+          }
+        } else if (error.request) {
+          console.log('Request made but no response was received')
+        } else {
+          console.log('Error setting up the request:', error.message)
+        }
       }
     }
   }

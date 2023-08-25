@@ -70,8 +70,15 @@ export default {
     closechange (i) {
       this.showchange = i
     },
-    searchitem () {
-      console.log('object')
+    async searchitem () {
+      const name = this.search
+      try {
+        const response = await this.$http.get(`/api/tags/search/${name}`)
+        console.log(response.data.data) // Access the data property
+        this.tags = response.data.data[0]
+      } catch (error) {
+        console.error('Error searching:', error)
+      }
     },
     deleteitem (info) {
       const articleid = info.id
@@ -82,7 +89,8 @@ export default {
       // console.log(info)
       this.articlesshow = true
       const name = info.tag
-      const res = await this.$http.get(`/api/article/search/${name}`)
+      console.log(info.tag)
+      const res = await this.$http.get(`/api/article/tag/${name}`)
       // console.log(res.data.data[0])
       this.articles = res.data.data[0]
       console.log(this.articles)
@@ -109,6 +117,13 @@ export default {
   },
   created () {
     this.gettags()
+  },
+  watch: {
+    search (newsearch) {
+      if (newsearch === '') {
+        this.gettags()
+      }
+    }
   }
 }
 </script>
@@ -119,6 +134,7 @@ export default {
   margin-right: 10px;
 }
 .tag-container{
+  padding: 20px;
   position: relative;
 }
 .addtag{

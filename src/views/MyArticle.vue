@@ -102,11 +102,28 @@ export default {
       this.clickitem = info
       this.changestatu = !this.changestatu
     },
-    deleteitem (info) {
+    async deleteitem (info) {
       console.log(info)
-      const articleid = info.id
-      this.$http.delete(`/api/article/${articleid}`)
-      window.location.reload()
+      const articleid = info.article_id
+      console.log(articleid)
+      try {
+        const response = await this.$http.delete(`/api/article/${articleid}`)
+        console.log(response)
+        window.location.reload()
+      } catch (error) {
+        console.error('Error creating article', error)
+        if (error.response) {
+          console.log('Response data:', error.response.data)
+          console.log('Status code:', error.response.status)
+          if (error.response.status === 403) {
+            alert('你没有权限进行该操作')
+          }
+        } else if (error.request) {
+          console.log('Request made but no response was received')
+        } else {
+          console.log('Error setting up the request:', error.message)
+        }
+      }
     },
     getclose (i) {
       this.$on('close', this.changestatu = i)
@@ -159,6 +176,7 @@ export default {
 }
 .article-container{
   position: relative;
+  padding: 20px;
   .up{
     position: absolute;
     top: 10%;

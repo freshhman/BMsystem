@@ -28,32 +28,17 @@ export default {
     }
   },
   methods: {
-    // submitForm () {
-    //   for (let i = 0; i < this.user.length; i++) {
-    //     if (this.user[i].username.indexOf(this.info.username) === -1 || this.user[i].password.indexOf(this.info.pass) === -1) {
-    //       this.istrue = false
-    //     } else {
-    //       this.istrue = true
-    //     }
-    //   }
-    //   if (this.istrue) {
-    //     localStorage.setItem('token', 'barrer xxxxxxxx')
-    //     this.$router.push('/home')
-    //   } else {
-    //     alert('用户名或密码错误')
-    //   }
-    // },
-    // async getalluser () {
-    //   const { data: res } = await this.$http.get('/api/admin')
-    //   this.user = res.data
-    // },
     async login () {
       console.log(this.info.username, this.info.pass)
       try {
         const response = await this.$http.post('/api/login', { username: this.info.username, password: this.info.pass })
 
         const token = response.data.token
-        localStorage.setItem('token', token)
+        const tokenWithBearer = `Bearer ${token}`
+        console.log(tokenWithBearer) // 可以在控制台输出带有 Bearer 前缀的 token 进行验证
+        console.log(response.data, 'dsdsdsdsdsd')
+        localStorage.setItem('token', tokenWithBearer)
+        // this.$store.dispatch('login', this.info.username)
         this.$router.push('/home')
       } catch (error) {
         this.errorMessage = 'Invalid username or password'

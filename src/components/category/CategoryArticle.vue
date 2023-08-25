@@ -19,7 +19,7 @@
         label="发布状态">
       </el-table-column>
       <el-table-column
-        prop="tag"
+        prop="category"
         label="标签">
       </el-table-column>
       <el-table-column

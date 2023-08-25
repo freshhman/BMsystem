@@ -36,7 +36,7 @@ export default {
     flex:1;
     margin-left: 250px;
     height: auto;
-    padding: 10px;
+    // padding: 10px;
   }
 }
 </style>

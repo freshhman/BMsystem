@@ -54,7 +54,7 @@ export default {
       this.$emit('close', !this.changestatu)
     },
     update () {
-      const articleid = this.item.id
+      const articleid = this.item.article_id
       const currentTime = new Date()
       const formattedTime = `${currentTime.getFullYear()}-${currentTime.getMonth() + 1}-${currentTime.getDay() + 13}  ${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`
       // 创建一个对象接收上传的数据
@@ -63,7 +63,7 @@ export default {
       formData.append('category', this.item.category)
       formData.append('amount', this.item.amount)
       formData.append('pic', this.$refs.photoInput.files[0])
-      formData.append('status', this.item.status)
+      formData.append('status', this.item.status ? 1 : 0)
       formData.append('create_time', this.item.create_time)
       formData.append('update_time', formattedTime)
       formData.append('text', this.item.text)

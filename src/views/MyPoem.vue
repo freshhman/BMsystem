@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="poem-container">
     <el-table
     :data="poem"
     border
@@ -54,5 +54,8 @@ export default {
 <style lang="less" scoped>
 .centered-form,.el-form-item__label {
   text-align: center;
+}
+.poem-container{
+  padding: 20px;
 }
 </style>

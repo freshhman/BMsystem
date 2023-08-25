@@ -47,7 +47,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   if (to.path !== '/login') {
-    if (token) {
+    if (token || to.path === '/register') {
       next()
     } else {
       next('/login')

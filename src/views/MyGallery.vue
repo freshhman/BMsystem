@@ -151,6 +151,7 @@ export default {
 <style lang="less" scoped>
 .gallery-container{
   position: relative;
+  padding: 20px;
 }
 .el-input{
   width: 250px;

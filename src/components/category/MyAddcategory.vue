@@ -1,10 +1,11 @@
 <template>
-  <div class="changetag-container">
+  <div class="mytag-container">
     <i class="el-icon-close" @click="close"></i>
-    <h2>修改标签</h2>
+    <h2>新增分类</h2>
     <el-input v-model="info.tag"></el-input>
     <el-button type="success" @click="submit">提交</el-button>
   </div>
+
 </template>
 
 <script>
@@ -12,46 +13,33 @@ export default {
   data () {
     return {
       info: {
-        id: null,
-        tag: null,
-        update_time: null
+        category: '',
+        update_time: ''
       }
-    }
-  },
-  props: {
-    clickitem: {
-      type: Object
     }
   },
   methods: {
     close () {
-      this.$emit('closechange', false)
+      this.$emit('closecategory', false)
     },
     async submit () {
       const currentTime = new Date()
       const formattedTime = `${currentTime.getFullYear()}-${currentTime.getUTCMonth() + 1}-${currentTime.getDate()} ${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`
-      const tag = this.info.tag
-      const tagid = this.info.id
-
-      await this.$http.patch(`/api/category/${tagid}`, { tag: tag, update_time: formattedTime })
-      window.location.reload()
-      this.$emit('closechange', false)
-    }
-  },
-  watch: {
-    clickitem: {
-      handler (newVal) {
-        // 更新 item 数据
-        this.info = { ...newVal }
-      },
-      immediate: true // 在初始化时触发监听
+      const category = this.info.tag
+      try {
+        await this.$http.post('/api/category', { category: category, update_time: formattedTime })
+        this.$emit('closecategory', false)
+        window.location.reload()
+      } catch (e) {
+        console.log(e.message)
+      }
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.changetag-container{
+.mytag-container{
   width: 400px;
   height: 250px;
   background-color: #433334;
@@ -73,4 +61,5 @@ export default {
     width: 60%;
   }
 }
+
 </style>
